@@ -336,9 +336,14 @@ process_domain() {
   local domain="$1"
   shift
 
-  info "Setting DNS Domain ${domain}"
-  (( dns_domain_count = 1 ))
-  dns_domain=("${domain}" false)
+  while read -ra cur; do
+    for i in "${cur[@]}"; do
+      echo "x: $i"
+      info "Setting DNS Domain ${i}"
+      (( dns_domain_count += 1 ))
+      dns_domain+=("${i}" false)
+    done
+  done <<< "$domain"
 }
 
 process_adapter_domain_suffix() {
